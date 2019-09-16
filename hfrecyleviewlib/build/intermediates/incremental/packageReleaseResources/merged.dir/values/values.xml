@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">hfrecyleviewlib</string>
+    <string name="pulling">下拉刷新</string>
+    <string name="pulling_refresh">松开加载</string>
+    <string name="pulling_refreshfinish">加载完成</string>
+    <string name="pulling_refreshing">正在加载</string>
+    <declare-styleable name="NestedRefreshLayout">
+        <attr format="integer" name="pullView"/>
+        <attr format="dimension|reference" name="pullViewHeight"/>
+        <attr format="dimension|reference" name="pullMinViewHeight"/>
+        <attr format="dimension|reference" name="pullMaxHeight"/>
+        <attr format="dimension|reference" name="refreshHeight"/>
+        <attr format="integer" name="animPlayDuration"/>
+    </declare-styleable>
+</resources>
