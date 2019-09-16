@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+
+    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    // 使用Java1.8
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        // dex突破65535的限制
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api "androidx.appcompat:appcompat:1.0.2"
+    api "com.google.android.material:material:1.1.0-alpha05"
+    api "androidx.legacy:legacy-support-v13:1.0.0"
+    //Rx
+    implementation "io.reactivex.rxjava2:rxjava:${rootProject.ext.rxjava}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rootProject.ext.rxandroid}"
+    api "com.trello.rxlifecycle3:rxlifecycle:${rootProject.ext.rxlifecycleVersion}"
+    api "com.trello.rxlifecycle3:rxlifecycle-components:${rootProject.ext.rxlifecycleVersion}"
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+
+    //net
+    implementation "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${rootProject.ext.adapter_rxjava}"
+    implementation "com.squareup.okhttp3:okhttp:${rootProject.ext.okhttp}"
+    api 'com.google.code.gson:gson:2.8.5'
+
+    //zxing
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
+    implementation 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
+    implementation 'cn.bingoogolapple:bga-zbar:1.1.7@aar'
+
+    // three party
+    api 'me.jessyan:autosize:1.1.0'
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    api 'org.greenrobot:eventbus:3.1.1'
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5'
+    api 'com.contrarywind:Android-PickerView:4.1.7'
+    //pic
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
+    implementation 'jp.wasabeef:glide-transformations:3.3.0'
+
+    //日志输出格式
+    implementation 'com.orhanobut:logger:2.2.0'
+}

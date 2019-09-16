@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+android {
+    //禁止Gradle检查PNG的合法性
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    // 使用Java1.8
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        // dex突破65535的限制
+        multiDexEnabled true
+
+        flavorDimensions "versionCode"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    //自定义打包时apk名称
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def fileName = "${variant.productFlavors[0].name}_${variant.versionName}_release.apk"
+            def buildType = variant.buildType.name
+            if (buildType.contains("release")) {
+                outputFileName = fileName
+                //修改生成路径
+                variant.getPackageApplicationProvider().get().outputDirectory = new File('/Users/sushuai/workface/Package')
+                variant.getPackageApplicationProvider().get().outputScope.apkDatas.forEach {
+                    apkData -> apkData.outputFileName = outputFileName
+                }
+
+            }
+        }
+
+    }
+    //多渠道打包
+    productFlavors {
+        MCommon {
+//            buildConfigField 'String', 'channel', '""'
+        }
+    }
+    productFlavors.all { flavor ->
+        flavor.applicationId 'com.common.sudroid'
+        flavor.versionCode 1
+        flavor.versionName "1.0.2"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':baselib')
+    api project(':hfrecyleviewlib')
+
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+}
