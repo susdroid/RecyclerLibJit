@@ -8,7 +8,7 @@ INJECTED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/Androi
 INJECTED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml:1:1-11:12
 INJECTED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml:1:1-11:12
 	package
-		ADDED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml:2:5-40
+		ADDED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml:2:5-39
 		INJECTED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml
 		INJECTED from /Users/sushuai/workface/DIY/Common/hfrecyleviewlib/src/main/AndroidManifest.xml
 	android:versionName

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.igeek.hfrecyleviewlib.R;
 import com.base.hfrecyleviewlib.utils.DensityUtils;
 
 public class DeafultRefreshView extends LinearLayout implements IPullRefreshView {
@@ -36,7 +35,7 @@ public class DeafultRefreshView extends LinearLayout implements IPullRefreshView
         setOrientation(HORIZONTAL);
 
         if (icon == null) {
-            LayoutParams lp = new LayoutParams(DensityUtils.dp2px(20), DensityUtils.dp2px(20),1);
+            LayoutParams lp = new LayoutParams(DensityUtils.dp2px(20), DensityUtils.dp2px(20), 1);
             icon = new ImageView(getContext());
             icon.setImageResource(R.drawable.default_ptr_flip);
             addView(icon, lp);

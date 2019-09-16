@@ -1,4 +1,4 @@
-com.igeek.hfrecyleviewlib
+com.base.hfrecyleviewlib
 attr alpha
 attr animPlayDuration
 attr coordinatorLayoutStyle

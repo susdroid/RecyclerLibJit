@@ -22,12 +22,10 @@ import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.ScrollerCompat;
 
-import com.igeek.hfrecyleviewlib.R;
-
 public class NestedRefreshLayout extends ViewGroup
         implements NestedScrollingParent, NestedScrollingChild {
 
-    private static final String TAG=NestedRefreshLayout.class.getSimpleName();
+    private static final String TAG = NestedRefreshLayout.class.getSimpleName();
     private static final int INVALID_POINTER = -1;
     private int mActivePointerId = INVALID_POINTER;
 
@@ -55,7 +53,7 @@ public class NestedRefreshLayout extends ViewGroup
 
     private Interpolator mInterpolator;
     private PullAnimation animation;
-    private IPullRefreshView.State pullState= IPullRefreshView.State.GONE;
+    private IPullRefreshView.State pullState = IPullRefreshView.State.GONE;
     private ScrollerCompat mScroller;
 
     public NestedRefreshLayout(Context context) {
@@ -77,31 +75,31 @@ public class NestedRefreshLayout extends ViewGroup
 
         ta.recycle();
 
-        if (pullviewId != -1){
+        if (pullviewId != -1) {
             pullView = LayoutInflater.from(context).inflate(pullviewId, this, false);
-            pullViewHeight=pullView.getLayoutParams().height;
-            refreshHeight=pullViewHeight;
-            pullMaxHeight=pullViewHeight*3/2;
+            pullViewHeight = pullView.getLayoutParams().height;
+            refreshHeight = pullViewHeight;
+            pullMaxHeight = pullViewHeight * 3 / 2;
         }
 
-        mScroller=ScrollerCompat.create(context);
+        mScroller = ScrollerCompat.create(context);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mInterpolator = new DecelerateInterpolator(DECELERATE_INTERPOLATION_FACTOR);
 
         parentHelper = new NestedScrollingParentHelper(this);
         childHelper = new NestedScrollingChildHelper(this);
-        pullHelper = new PullViewHelper(pullViewHeight, pullMaxHeight,pullMinViewHeight,refreshHeight);
+        pullHelper = new PullViewHelper(pullViewHeight, pullMaxHeight, pullMinViewHeight, refreshHeight);
 
         setWillNotDraw(false);
         setNestedScrollingEnabled(true);
 
-        animation=new PullAnimation() {
+        animation = new PullAnimation() {
             @Override
             public void applyTransformationTop(int targetTop) {
-                final int oldScroll=pullHelper.getScroll();
+                final int oldScroll = pullHelper.getScroll();
                 pullHelper.setScroll(targetTop);
-                final int offsetY=targetTop - oldScroll;
-                if(offsetY!=0)
+                final int offsetY = targetTop - oldScroll;
+                if (offsetY != 0)
                     scrollTargetOffset(offsetY);
             }
         };
@@ -187,13 +185,13 @@ public class NestedRefreshLayout extends ViewGroup
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
 
-        final boolean canScrollUp= pullHelper.canScrollUp();
+        final boolean canScrollUp = pullHelper.canScrollUp();
 
-        if(dy>0&&canScrollUp){
+        if (dy > 0 && canScrollUp) {
             consumed[1] = scrollMoveOffset(dy);
         }
 
-        final int[] parentConsumed = new int [2];
+        final int[] parentConsumed = new int[2];
         if (dispatchNestedPreScroll(dx - consumed[0], dy - consumed[1], parentConsumed, null)) {
             consumed[0] += parentConsumed[0];
             consumed[1] += parentConsumed[1];
@@ -215,7 +213,7 @@ public class NestedRefreshLayout extends ViewGroup
 
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-        if(!consumed){
+        if (!consumed) {
             return flingWithNestedDispatch((int) velocityY);
         }
         return false;
@@ -343,7 +341,7 @@ public class NestedRefreshLayout extends ViewGroup
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         final int actionMasked = MotionEventCompat.getActionMasked(ev);
-        if(actionMasked == MotionEvent.ACTION_UP||actionMasked == MotionEvent.ACTION_CANCEL){
+        if (actionMasked == MotionEvent.ACTION_UP || actionMasked == MotionEvent.ACTION_CANCEL) {
             checkSpringBack();
         }
         return super.dispatchTouchEvent(ev);
@@ -443,26 +441,26 @@ public class NestedRefreshLayout extends ViewGroup
     //视图内容滚动至指定位置并更新下拉视图状态
     private int scrollMoveOffset(int deltaY) {
 
-        if(deltaY==0||pullState== IPullRefreshView.State.MOVE_SRPINGBACK){
+        if (deltaY == 0 || pullState == IPullRefreshView.State.MOVE_SRPINGBACK) {
             return deltaY;
         }
 
         final int oldScrollY = pullHelper.getScroll();
-        final int consumed =pullHelper.checkUpdateScroll(deltaY);
+        final int consumed = pullHelper.checkUpdateScroll(deltaY);
         final int scrollY = pullHelper.getScroll();
         final int delta = scrollY - oldScrollY;
 
-        if(pullState == IPullRefreshView.State.MOVE_REFRESH){
+        if (pullState == IPullRefreshView.State.MOVE_REFRESH) {
             //待定处理
-        }else{
-            if (pullState!= IPullRefreshView.State.MOVE_REFRESH) {
+        } else {
+            if (pullState != IPullRefreshView.State.MOVE_REFRESH) {
                 if (pullHelper.canTouchUpToRefresh()) {
-                    if(pullState!= IPullRefreshView.State.MOVE_WAIT_REFRESH){
+                    if (pullState != IPullRefreshView.State.MOVE_WAIT_REFRESH) {
                         pullState = IPullRefreshView.State.MOVE_WAIT_REFRESH;
                         pullRefreshView.onPullFreeHand();
                     }
                 } else {
-                    if(pullState!= IPullRefreshView.State.MOVE_PULL){
+                    if (pullState != IPullRefreshView.State.MOVE_PULL) {
                         pullState = IPullRefreshView.State.MOVE_PULL;
                         pullRefreshView.onPullDowning();
                     }
@@ -475,7 +473,7 @@ public class NestedRefreshLayout extends ViewGroup
 //                "\nrefreshHeight="+pullHelper.getPullRefreshHeight()+"\npullMaxHegiht="+pullHelper.getMaxHeight());
 
 
-        if(delta!=0)
+        if (delta != 0)
             scrollTargetOffset(delta);
 
         return consumed;
@@ -486,7 +484,7 @@ public class NestedRefreshLayout extends ViewGroup
     private void scrollTargetOffset(int offsetY) {
         pullView.bringToFront();
         scrollBy(0, offsetY);
-        pullRefreshView.onPullProgress(pullHelper.getScroll(),pullHelper.getScrollPercent());
+        pullRefreshView.onPullProgress(pullHelper.getScroll(), pullHelper.getScrollPercent());
     }
 
     //【刷新完成】后执行【回滚隐藏动画】
@@ -505,11 +503,11 @@ public class NestedRefreshLayout extends ViewGroup
     //手离开屏幕后检查和更新状态
     private synchronized void checkSpringBack() {
 //        Log.i(TAG,"checkSpringBack ->\npullState="+pullState.toString()+"\npullHelper.getScroll()="+pullHelper.getScroll()+"\ncanTouchUpToRefresh="+pullHelper.canTouchUpToRefresh());
-        if(pullState== IPullRefreshView.State.MOVE_REFRESH){
-            if(pullHelper.canTouchUpToRefresh())
-                animToRefreshPosition(pullHelper.getScroll(), null,0);
-        }else{
-            if(pullState!= IPullRefreshView.State.MOVE_SRPINGBACK){
+        if (pullState == IPullRefreshView.State.MOVE_REFRESH) {
+            if (pullHelper.canTouchUpToRefresh())
+                animToRefreshPosition(pullHelper.getScroll(), null, 0);
+        } else {
+            if (pullState != IPullRefreshView.State.MOVE_SRPINGBACK) {
                 froceRefreshToState(pullHelper.canTouchUpToRefresh());
             }
         }
@@ -517,29 +515,29 @@ public class NestedRefreshLayout extends ViewGroup
 
     //更新视图至指定刷新状态
     public void froceRefreshToState(boolean refresh) {
-        froceRefreshToState(refresh,0);
+        froceRefreshToState(refresh, 0);
     }
 
     //更新视图至指定刷新状态
     public void froceRefreshToState(boolean refresh, long delay) {
-        final int scrollY=pullHelper.getScroll();
+        final int scrollY = pullHelper.getScroll();
         if (refresh) {
-            pullState= IPullRefreshView.State.MOVE_REFRESH;
-            animToRefreshPosition(scrollY, refreshingListener,0);
+            pullState = IPullRefreshView.State.MOVE_REFRESH;
+            animToRefreshPosition(scrollY, refreshingListener, 0);
         } else {
-            postDelayed(delayAnimToStartPosTask,delay);
+            postDelayed(delayAnimToStartPosTask, delay);
         }
     }
 
-    private void animToStartPosition(int from,Animation.AnimationListener listener, long delay) {
-        animToPostion(from,0,delay,listener);
+    private void animToStartPosition(int from, Animation.AnimationListener listener, long delay) {
+        animToPostion(from, 0, delay, listener);
     }
 
     private void animToRefreshPosition(int from, Animation.AnimationListener listener, long delay) {
-        animToPostion(from,-pullHelper.getPullRefreshHeight(),delay,listener);
+        animToPostion(from, -pullHelper.getPullRefreshHeight(), delay, listener);
     }
 
-    public void animToPostion(int from,int to,long delayTime,Animation.AnimationListener listener){
+    public void animToPostion(int from, int to, long delayTime, Animation.AnimationListener listener) {
         animation.reset();
         animation.setFrom(from);
         animation.setTo(to);
@@ -553,10 +551,10 @@ public class NestedRefreshLayout extends ViewGroup
 
     //根据手指快速滑动时候的速率滚动视图
     private boolean flingWithNestedDispatch(int velocityY) {
-        final boolean canFilngUp=pullHelper.canScrollUp() && velocityY > 0;
+        final boolean canFilngUp = pullHelper.canScrollUp() && velocityY > 0;
 //        final boolean canFilngDown=pullHelper.canScrollDown() && velocityY < 0 && (!ViewCompat.canScrollVertically(nestedTarget,-1));
 //        final boolean canFling = canFilngUp || canFilngDown;
-        final boolean canFling = canFilngUp ;
+        final boolean canFling = canFilngUp;
         if (!dispatchNestedPreFling(0, velocityY)) {
             dispatchNestedFling(0, velocityY, canFling);
             if (canFling) {
@@ -573,7 +571,7 @@ public class NestedRefreshLayout extends ViewGroup
             int oldY = getScrollY();
             int x = mScroller.getCurrX();
             int y = mScroller.getCurrY();
-            final int deltay=y-oldY;
+            final int deltay = y - oldY;
             if (oldX != x || oldY != y) {
                 scrollMoveOffset(deltay);
                 ViewCompat.postInvalidateOnAnimation(this);
@@ -583,6 +581,7 @@ public class NestedRefreshLayout extends ViewGroup
 
     /**
      * 根据速率调整视图的滚动
+     *
      * @param velocityY Y轴方向上的速率. 负值标识用户向下的快速滑动
      */
     public void fling(int velocityY) {
@@ -637,7 +636,7 @@ public class NestedRefreshLayout extends ViewGroup
         mOnRefreshListener = listener;
     }
 
-    private final PullAnimationListener refreshingListener=new PullAnimationListener() {
+    private final PullAnimationListener refreshingListener = new PullAnimationListener() {
         @Override
         public void start(Animation animation) {
             pullRefreshView.onPullRefresh();
@@ -651,15 +650,15 @@ public class NestedRefreshLayout extends ViewGroup
         }
     };
 
-    private final PullAnimationListener resetListener=new PullAnimationListener() {
+    private final PullAnimationListener resetListener = new PullAnimationListener() {
         @Override
         public void start(Animation animation) {
-            pullState= IPullRefreshView.State.MOVE_SRPINGBACK;
+            pullState = IPullRefreshView.State.MOVE_SRPINGBACK;
         }
 
         @Override
         public void end(Animation animation) {
-            if(pullHelper.getScroll()==0){
+            if (pullHelper.getScroll() == 0) {
                 pullState = IPullRefreshView.State.GONE;
                 pullRefreshView.onPullHided();
             }
@@ -667,14 +666,14 @@ public class NestedRefreshLayout extends ViewGroup
     };
 
 
-    private final Runnable delayAnimToStartPosTask=new Runnable() {
+    private final Runnable delayAnimToStartPosTask = new Runnable() {
         @Override
         public void run() {
             animToStartPosition(pullHelper.getScroll(), resetListener, 0);
         }
     };
 
-    public static abstract class PullAnimation extends Animation{
+    public static abstract class PullAnimation extends Animation {
         private int from;
         private int to;
         private int animDuration;
@@ -712,7 +711,7 @@ public class NestedRefreshLayout extends ViewGroup
         }
     }
 
-    public static abstract class PullAnimationListener implements Animation.AnimationListener{
+    public static abstract class PullAnimationListener implements Animation.AnimationListener {
 
         @Override
         public void onAnimationStart(Animation animation) {
