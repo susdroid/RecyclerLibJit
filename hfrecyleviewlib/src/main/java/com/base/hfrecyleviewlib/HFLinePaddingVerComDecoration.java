@@ -8,7 +8,7 @@ import com.base.hfrecyleviewlib.utils.DensityUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- *
+ * Created by Sudroid on 2019-09-11.
  */
 public class HFLinePaddingVerComDecoration extends RecyclerView.ItemDecoration {
 

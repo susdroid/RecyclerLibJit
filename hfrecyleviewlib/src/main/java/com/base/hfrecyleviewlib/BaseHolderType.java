@@ -1,7 +1,7 @@
 package com.base.hfrecyleviewlib;
 
 /**
- * Created by igeek
+ * Created by Sudroid
  */
 public abstract class BaseHolderType<T,VH extends BasicRecyViewHolder> implements HolderTypeData<VH> {
 
