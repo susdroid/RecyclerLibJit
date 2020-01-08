@@ -379,7 +379,7 @@ public abstract class BasicHFRecyAdapter<T> extends RecyclerView.Adapter<BasicRe
         if (isEmptyView)
             notifyDataSetChanged();
         else
-            notifyItemChanged(datas.size() + (headView == null ? 0 : 1));
+            notifyItemChanged(datas.size() + (footView == null ? 0 : 1));
     }
 
     public boolean needMatchParentWidth(int position) {
